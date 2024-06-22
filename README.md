@@ -1,7 +1,7 @@
 # **Monitoring System for production processes**
 
 ### References:
-  - OV7670 non-FIFO scripts are based on: https://github.com/alankrantas/OV7670-ESP32-TFT/tree/main?tab=readme-ov-file (based on https://github.com/kobatan/OV7670-ESP32)
+  - OV7670 non-FIFO scripts: https://github.com/alankrantas/OV7670-ESP32-TFT/tree/main?tab=readme-ov-file (based on https://github.com/kobatan/OV7670-ESP32)
   - ESPAsyncWebServer: https://github.com/me-no-dev/ESPAsyncWebServer/tree/master
 
 Hardware:
