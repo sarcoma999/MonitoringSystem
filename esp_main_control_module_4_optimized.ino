@@ -23,8 +23,8 @@ bool washingInProgress = false;
 bool errorWashing = false;
 unsigned long startTime = 0;
 
-const char* ssid = "oleja";
-const char* password = "cambridge20022020";
+const char* ssid = "*****"; // your ssid
+const char* password = "*******"; // your password
 
 // Server to handle incoming connections
 AsyncWebServer server(80);
@@ -64,25 +64,6 @@ float distanceCm = 0.0;
 
 OV7670 *camera;
 unsigned char bmpHeader[BMP::headerSize];
-
-String URL = "http://192.168.0.102:8080/sensors_project/savetodb.php";
-
-void saveToDB()
-{
-  String response = "temperature=" + String(temp) + "&distance=" + String(distanceCm) + "&dht_state=" + String(tempState) + "&ultrasonic_state=" + String(waterState);
-  HTTPClient http;
-  http.begin(URL);
-  http.addHeader("Content-Type", "application/x-www-form-urlencoded");
-  int httpResponseCode = http.POST(response);
-  if (httpResponseCode > 0) {
-    Serial.print("HTTP Response code: ");
-    Serial.println(httpResponseCode);
-  } else {
-    Serial.print("Error code: ");
-    Serial.println(httpResponseCode);
-  }
-  http.end();
-}
 
 String SendHTML() {
   String ptr = "<!DOCTYPE html> <html>\n";
@@ -125,7 +106,6 @@ String SendHTML() {
   ptr += "      document.getElementById('waterState').innerText = (data.waterState === 0 ? 'critical' : 'normal');\n";
   ptr += "      var waterStateSquare = document.getElementById('waterStateSquare');\n";
   ptr += "      waterStateSquare.className = (data.waterState === 0 ? 'red' : 'green');\n";
-  
   ptr += "      document.getElementById('valveState').innerText = (data.valveState === 0 ? 'opened' : 'closed');\n";
   ptr += "    }\n";
   ptr += "  };\n";
@@ -161,7 +141,6 @@ String SendHTML() {
   ptr += "  xhr.onreadystatechange = function() {\n";
   ptr += "    if (this.readyState == 4 && this.status == 200) {\n";
   ptr += "      document.getElementById('status').innerText = this.responseText;\n";
-  //ptr += "      intervalId = setInterval(fetchData, 2000);\n";
   ptr += "    }\n";
   ptr += "  };\n";
   ptr += "  xhr.send();\n";
@@ -227,118 +206,6 @@ String SendHTML() {
   return ptr;
 }
 
-
-//String SendHTML() {
-//  String ptr = "<!DOCTYPE html> <html>\n";
-//  ptr += "<meta charset=\"utf-8\"><head><meta name=\"viewport\" content=\"width=device-width, initial-scale=1.0, user-scalable=no\">\n";
-//  ptr += "<title>Monitoring System Control</title>\n";
-//  ptr += "<style>html { font-family: Helvetica; display: inline-block; margin: 0px auto; text-align: center;} #video-container {width: 100%; height: auto;}";
-//  ptr += "body{margin-top: 50px;} h1 {color: #444444;margin: 50px auto 30px;} h3 {color: #444444;margin-bottom: 50px;} img{height: auto; width: 80%; max-width: 640px;}\n";
-//  ptr += "p {font-size: 14px;color: #888;margin-bottom: 10px;}\n";
-//  ptr += "select {margin: 10px; padding: 5px;}\n";
-//  ptr += "button {margin: 10px; padding: 10px 20px;}\n";
-//  ptr += "</style>\n";
-//  ptr += "<script>\n";
-//  ptr += "var intervalId;\n";
-//  ptr += "function fetchData() {\n";
-//  ptr += "  var xhr = new XMLHttpRequest();\n";
-//  ptr += "  xhr.onreadystatechange = function() {\n";
-//  ptr += "    if (this.readyState == 4 && this.status == 200) {\n";
-//  ptr += "      var data = JSON.parse(this.responseText);\n";
-//  ptr += "      document.getElementById('temp').innerText = data.temperature;\n";
-//  ptr += "      document.getElementById('tempState').innerText = data.tempState;\n";
-//  ptr += "      document.getElementById('waterLevel').innerText = data.distance;\n";
-//  ptr += "      document.getElementById('waterState').innerText = data.waterState;\n";
-//  ptr += "      document.getElementById('valveState').innerText = data.valveState;\n";
-//  ptr += "    }\n";
-//  ptr += "  };\n";
-//  ptr += "  xhr.open('GET', '/sensor_data', true);\n";
-//  ptr += "  xhr.send();\n";
-//  ptr += "}\n";
-//  ptr += "function updateVideo() {\n";
-//  ptr += "  document.getElementById('video').src = '/camera?rand=' + Math.random();\n";
-//  ptr += "}\n";
-//  ptr += "function openValve() {\n";
-//  ptr += "  var xhr = new XMLHttpRequest();\n";
-//  ptr += "  xhr.open('POST', '/open_valve', true);\n";
-//  ptr += "  xhr.onreadystatechange = function() {\n";
-//  ptr += "    if (this.readyState == 4 && this.status == 200) {\n";
-//  ptr += "      document.getElementById('status').innerText = this.responseText;\n";
-//  ptr += "    }\n";
-//  ptr += "  };\n";
-//  ptr += "  xhr.send();\n";
-//  ptr += "}\n";
-//  ptr += "function closeValve() {\n";
-//  ptr += "  var xhr = new XMLHttpRequest();\n";
-//  ptr += "  xhr.open('POST', '/close_valve', true);\n";
-//  ptr += "  xhr.onreadystatechange = function() {\n";
-//  ptr += "    if (this.readyState == 4 && this.status == 200) {\n";
-//  ptr += "      document.getElementById('status').innerText = this.responseText;\n";
-//  ptr += "    }\n";
-//  ptr += "  };\n";
-//  ptr += "  xhr.send();\n";
-//  ptr += "}\n";
-//  ptr += "function startWashing() {\n";
-//  ptr += "  var xhr = new XMLHttpRequest();\n";
-//  ptr += "  xhr.open('POST', '/start_washing', true);\n";
-//  ptr += "  xhr.onreadystatechange = function() {\n";
-//  ptr += "    if (this.readyState == 4 && this.status == 200) {\n";
-//  ptr += "      document.getElementById('status').innerText = this.responseText;\n";
-//  //ptr += "      intervalId = setInterval(fetchData, 2000);\n";
-//  ptr += "    }\n";
-//  ptr += "  };\n";
-//  ptr += "  xhr.send();\n";
-//  ptr += "}\n";
-//  ptr += "function updateLiquidInfo() {\n";
-//  ptr += "  var liquid = document.getElementById('liquidSelect').value;\n";
-//  ptr += "  var info = '';\n";
-//  ptr += "  if (liquid === 'Liquid1') { info = 'Information about liquid: VIGON US\\n' +\n";
-//  ptr += "                                     'Density at 20°C - 0.99 g/cm3\\n' +\n";
-//  ptr += "                                     'Boiling point - 165 - 212°C\\n' +\n";
-//  ptr += "                                     'pH - 11.3\\n' +\n";
-//  ptr += "                                     'Purification temperature - 40 - 60°C\\n' +\n";
-//  ptr += "                                     'Solubility in water - soluble\\n' +\n";
-//  ptr += "                                     'Solution concentration - 15 - 30%\\n';\n";
-//  ptr += "                                      }\n";
-//  ptr += "  if (liquid === 'Liquid2') { info = 'Information about liquid: ZESTRON FA+\\n' +\n";
-//  ptr += "                                     'Density at 20°C - 0.99 g/cm3\\n' +\n";
-//  ptr += "                                     'Boiling point - 162 - 190°C\\n' +\n";
-//  ptr += "                                     'pH - 10.4\\n' +\n";
-//  ptr += "                                     'Purification temperature - 40 - 55°C\\n' +\n";
-//  ptr += "                                     'Solubility in water - soluble\\n' +\n";
-//  ptr += "                                     'Solution concentration - ready solution';\n";
-//  ptr += "                                      }\n";;
-//  ptr += "  document.getElementById('liquidInfo').innerText = info;\n";
-//  ptr += "}\n";
-//  ptr += "setInterval(fetchData, 2000);\n";
-//  ptr += "setInterval(updateVideo, 500);\n";
-//  ptr += "</script>\n";
-//  ptr += "</head>\n";
-//  ptr += "<body onload=\"fetchData(); updateVideo();\">\n";
-//  ptr += "<h1>Monitoring Control System</h1>\n";
-//  ptr += "<h3>WiFi mode (localIP)</h3>\n";
-//  ptr += "<div id='sensorContainer'>\n";
-//  ptr += "<p>Temperature: <span id='temp'></span></p> <p>Temperature state: <span id='tempState'></span></p>\n";
-//  ptr += "<p>Water level: <span id='waterLevel'></span></p> <p>Water level state: <span id='waterState'></span></p>\n";
-//  ptr += "<p>Valve state: <span id='valveState'></span></p>\n";
-//  ptr += "<select id='liquidSelect' onchange='updateLiquidInfo()'>\n";
-//  ptr += "  <option value='Liquid1' class='liquidOption'>VIGON US</option>\n";
-//  ptr += "  <option value='Liquid2' class='liquidOption'>ZESTRON FA+</option>\n";
-//  ptr += "</select>\n";
-//  ptr += "<p id='liquidInfo'></p>\n";
-//  ptr += "<button id='openValveButton' onclick='openValve()'>Open valve</button>\n";
-//  ptr += "<button id='closeValveButton' onclick='closeValve()'>Close valve</button>\n";
-//  ptr += "<button onclick='startWashing()'>Prepare for washing</button>\n";
-//  ptr += "<p id='status'></p>\n";
-//  ptr += "</div>\n";
-//  ptr += "<div id=\"video-container\">\n";
-//  ptr += "<img id='video' src='/camera' width='320' height='240'>\n";
-//  ptr += "</div>\n";
-//  ptr += "</body>\n";
-//  ptr += "</html>\n";
-//  return ptr;
-//}
-
 void handleRoot(AsyncWebServerRequest *request){
   request->send(200, "text/html", SendHTML());
 }
@@ -356,7 +223,6 @@ void handleSensorData(AsyncWebServerRequest *request) {
   json += "}";
 
   request->send(200, "application/json", json);
-  //saveToDB();
 }
 
 void handleCameraStream(AsyncWebServerRequest *request){
@@ -378,9 +244,7 @@ void handleCameraStream(AsyncWebServerRequest *request){
       dataIndex += len;
       return len;
     } else {
-      // Если все данные кадра были отправлены, сбросим индекс для отправки следующего кадра
       dataIndex = 0;
-      // Закрываем соединение, чтобы браузер запросил новый кадр
       return 0;
     }
   });
@@ -392,13 +256,13 @@ void handleOpenValve(AsyncWebServerRequest *request) {
     request->send(200, "text/plain", "Error: Water lvl too high!!!");
     return;
   }
-//  valve.write(180); // Открыть вентиль
+//  valve.write(180); // Open valve
   valveState = 0;
   request->send(200, "text/plain", "Valve`s open");
 }
 
 void handleCloseValve(AsyncWebServerRequest *request) {
-//  valve.write(0); // Закрыть вентиль
+//  valve.write(0); // Close valve
   valveState = 1;
   request->send(200, "text/plain", "Valve`s closed");
 }
@@ -417,7 +281,7 @@ void handleStartWashing(AsyncWebServerRequest *request) {
   washingInProgress = true;
   startTime = millis();
   stepperRotate();
-  stepperTicker.once(10, stepperStop);// Начать процесс
+  stepperTicker.once(10, stepperStop);
 
   request->send(200, "text/plain", "Preparing`s started...");
 }
@@ -467,16 +331,6 @@ void soundSensor() {
   }
 }
 
-void openValve() {
-  valve.write(180);
-  Serial.println("Open valve");
-}
-
-void closeValve() {
-  valve.write(0);
-  Serial.println("Close valve");
-}
-
 void stepperRotate(){
   Serial.println("Moving Forward");
   digitalWrite(motor1Pin1, LOW);
@@ -487,7 +341,6 @@ void stepperStop(){
   digitalWrite(motor1Pin1, LOW);
   digitalWrite(motor1Pin2, LOW);
   Serial.println("Motor stopped");
-  //closeValve();
   washingInProgress = false;
 }
 
@@ -498,8 +351,6 @@ void setup() {
   pinMode(echoPin, INPUT);
   pinMode(buzzPin, OUTPUT);
   pinMode(warningLedPin, OUTPUT);
-  //servo1.attach(16);
-  //servo2.attach(17);
   valve.attach(19);
 
   dht11.begin();
