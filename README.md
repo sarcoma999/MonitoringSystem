@@ -1,19 +1,19 @@
-Monitoring System for production processes
+**Monitoring System for production processes**
 
 References:
   OV7670 non-FIFO scripts are based on: https://github.com/alankrantas/OV7670-ESP32-TFT/tree/main?tab=readme-ov-file (based on https://github.com/kobatan/OV7670-ESP32)
   ESPAsyncWebServer: https://github.com/me-no-dev/ESPAsyncWebServer/tree/master
 
 Hardware:
-  ESP-WROOM-32 (LuaNode32)
-  non-FIFO OV7670 camera module
-  DHT11 (humidity and temperature sensor module)
-  HC-SR04 (ultrasonic distance sensor)
-  LED (implemented in alarm system)
-  BUZZER (implemented in alarm system)
-  3V DC Motor (simulates the stirring process)
-  L293D (motor driver for motor connection)
-  SG90 (simulates the valve`s behavior)
+  >- ESP-WROOM-32 (LuaNode32)
+  >- non-FIFO OV7670 camera module
+  >- DHT11 (humidity and temperature sensor module)
+  >- HC-SR04 (ultrasonic distance sensor)
+  >- LED (implemented in alarm system)
+  >- BUZZER (implemented in alarm system)
+  >- 3V DC Motor (simulates the stirring process)
+  >- L293D (motor driver for motor connection)
+  >- SG90 (simulates the valve`s behavior)
 
 Hardware connection (wiring scheme)
 
